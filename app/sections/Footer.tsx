@@ -10,8 +10,8 @@ const footerLinks = {
     { label: "Changelog", href: "https://github.com/halfhandorg/halfhand/blob/main/CHANGELOG.md", external: true },
   ],
   Legal: [
-    { label: "Privacy", href: "/privacy/" },
-    { label: "Terms", href: "/terms/" },
+    { label: "Privacy", href: "/privacy/", external: false },
+    { label: "Terms", href: "/terms/", external: false },
   ],
 };
 
