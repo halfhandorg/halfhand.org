@@ -59,8 +59,8 @@ export function Terminal({
       {/* Terminal body */}
       <div className="px-4 py-4 font-mono text-sm leading-relaxed overflow-x-auto">
         {command && (
-          <div className="group flex items-center justify-between text-muted-foreground mb-2">
-            <span>{command}</span>
+          <div className="group flex items-center justify-between text-muted-foreground mb-2 min-w-max">
+            <span className="whitespace-nowrap pr-4">{command}</span>
             <button
               onClick={handleCopy}
               className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-[#30363d] rounded-md text-[#8b949e] hover:text-gray-300"

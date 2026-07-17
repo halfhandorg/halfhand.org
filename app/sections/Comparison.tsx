@@ -23,8 +23,8 @@ export function Comparison() {
           </p>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-border/60">
-          <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto rounded-xl border border-border/60">
+          <table className="w-full text-left text-sm min-w-[500px]">
             <thead>
               <tr className="border-b border-border/60 bg-secondary/30">
                 <th className="px-6 py-4 font-semibold text-foreground">
