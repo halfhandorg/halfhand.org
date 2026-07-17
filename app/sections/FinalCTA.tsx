@@ -27,7 +27,7 @@ export function FinalCTA() {
           <div className="w-full max-w-lg">
             <Terminal
               title="bash"
-              command="$ cargo install halfhand@0.1.0-beta.1"
+              command="$ cargo install halfhand"
               lines={[]}
             />
           </div>
