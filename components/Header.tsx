@@ -9,6 +9,7 @@ const navLinks = [
   { label: 'Features', href: '#features' },
   { label: 'CLI', href: '#cli' },
   { label: 'Open Source', href: '#open-source' },
+  { label: 'Testimonials', href: '#testimonials' },
   { label: 'Documentation', href: 'https://docs.halfhand.org', external: true },
 ]
 
