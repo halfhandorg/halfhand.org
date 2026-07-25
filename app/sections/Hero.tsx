@@ -20,13 +20,13 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-24"
+      className="relative overflow-hidden pt-24 pb-16 sm:pt-40 sm:pb-24"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           {/* Left: Copy */}
           <div className="max-w-2xl">
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl animate-slide-up">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-6xl animate-slide-up">
               Replay every action your agents took.
             </h1>
             <p className="mt-6 text-lg leading-8 text-muted-foreground animate-slide-up" style={{ animationDelay: '0.1s' }}>

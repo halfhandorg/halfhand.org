@@ -24,18 +24,18 @@ export function Comparison() {
         </div>
 
         <div className="overflow-x-auto rounded-xl border border-border/60">
-          <table className="w-full text-left text-sm min-w-[500px]">
+          <table className="w-full text-left text-xs sm:text-sm min-w-[400px] sm:min-w-[500px]">
             <thead>
               <tr className="border-b border-border/60 bg-secondary/30">
-                <th className="px-6 py-4 font-semibold text-foreground">
+                <th className="px-3 sm:px-6 py-3 sm:py-4 font-semibold text-foreground">
                   Feature
                 </th>
-                <th className="px-6 py-4 font-semibold text-foreground text-center">
+                <th className="px-3 sm:px-6 py-3 sm:py-4 font-semibold text-foreground text-center">
                   <span className="inline-flex items-center gap-1">
                     <span className="font-bold">Halfhand</span>
                   </span>
                 </th>
-                <th className="px-6 py-4 font-semibold text-muted-foreground text-center">
+                <th className="px-3 sm:px-6 py-3 sm:py-4 font-semibold text-muted-foreground text-center">
                   Traditional Logs
                 </th>
               </tr>
@@ -43,15 +43,15 @@ export function Comparison() {
             <tbody className="divide-y divide-border/40">
               {rows.map((row, index) => (
                 <tr key={index} className="bg-card/30">
-                  <td className="px-6 py-4 font-medium text-foreground">
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 font-medium text-foreground">
                     {row.feature}
                   </td>
-                  <td className="px-6 py-4 text-center">
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-center">
                     <span className="inline-flex items-center justify-center rounded-full bg-emerald-500/10 p-1.5">
                       <Check className="h-4 w-4 text-emerald-500" />
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-center">
+                  <td className="px-3 sm:px-6 py-3 sm:py-4 text-center">
                     {row.logs === 'partial' ? (
                       <span className="inline-flex items-center gap-1.5 text-xs text-amber-400">
                         <X className="h-3.5 w-3.5" />

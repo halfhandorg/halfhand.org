@@ -102,15 +102,13 @@ export function HowItWorks() {
           {/* Connector line hack — simpler to just use flex gaps */}
         </div>
 
-        <div className="space-y-16">
+        <div className="space-y-12 sm:space-y-16">
           {steps.map((step, index) => (
             <div
               key={index}
               className={cn(
                 "grid gap-8 items-center",
-                index % 2 === 0
-                  ? "lg:grid-cols-2"
-                  : "lg:grid-cols-2 lg:direction-rtl",
+                "lg:grid-cols-2",
               )}
             >
               <div className={cn("max-w-xl", index % 2 === 1 && "lg:order-2")}>
