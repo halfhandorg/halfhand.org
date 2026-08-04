@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { EthicalAd } from "@/components/EthicalAd";
 
 const footerLinks = {
   Product: [
@@ -63,7 +64,12 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 pt-8 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <EthicalAd
+          type="text"
+          className="mt-12 rounded-md border border-border/40 p-3"
+        />
+
+        <div className="mt-8 pt-8 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} Halfhand. Released under
             Apache-2.0 license.

@@ -146,6 +146,24 @@ export function getDocContentBySlug(slugArray: string[]): DocPageContent | null 
   }
 }
 
+// Splits doc HTML right before the second <h2>, so a component (e.g. an ad)
+// can be inserted between the two halves. Returns `after: null` when there's
+// no second section to split before.
+export function splitDocHtmlAtSection(html: string): {
+  before: string
+  after: string | null
+} {
+  const firstH2 = html.indexOf('<h2')
+  if (firstH2 === -1) {
+    return { before: html, after: null }
+  }
+  const secondH2 = html.indexOf('<h2', firstH2 + 1)
+  if (secondH2 === -1) {
+    return { before: html, after: null }
+  }
+  return { before: html.slice(0, secondH2), after: html.slice(secondH2) }
+}
+
 export function getAllDocSlugs(): string[][] {
   const sections = getDocsStructure()
   const slugs: string[][] = [[]] // [] represents the index /docs page

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getDocContentBySlug, getAllDocSlugs } from '@/lib/docs'
+import { getDocContentBySlug, getAllDocSlugs, splitDocHtmlAtSection } from '@/lib/docs'
+import { EthicalAd } from '@/components/EthicalAd'
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>
@@ -56,9 +57,17 @@ export default async function DocPage({ params }: PageProps) {
     notFound()
   }
 
+  const { before, after } = splitDocHtmlAtSection(doc.html)
+
   return (
-    <div
-      dangerouslySetInnerHTML={{ __html: doc.html }}
-    />
+    <>
+      <div dangerouslySetInnerHTML={{ __html: before }} />
+      {after && (
+        <>
+          <EthicalAd type="text" className="not-prose my-10 rounded-md border border-border/40 p-3" />
+          <div dangerouslySetInnerHTML={{ __html: after }} />
+        </>
+      )}
+    </>
   )
 }
