@@ -1,12 +1,27 @@
 import type { Metadata } from 'next'
 import { Footer } from '../sections/Footer'
 
+const title = 'Privacy Policy — Halfhand'
+const description =
+  'How Halfhand handles data. Halfhand is local-first: agent recordings stay on your machine. This policy covers the halfhand.org website and the Halfhand software.'
+
 export const metadata: Metadata = {
-  title: 'Privacy Policy — Halfhand',
-  description:
-    'How Halfhand handles data. Halfhand is local-first: agent recordings stay on your machine. This policy covers the halfhand.org website and the Halfhand software.',
+  title,
+  description,
   alternates: {
     canonical: 'https://halfhand.org/privacy/',
+  },
+  openGraph: {
+    title,
+    description,
+    url: 'https://halfhand.org/privacy/',
+    type: 'website',
+    images: ['https://halfhand.org/opengraph-image'],
+  },
+  twitter: {
+    title,
+    description,
+    images: ['https://halfhand.org/opengraph-image'],
   },
 }
 

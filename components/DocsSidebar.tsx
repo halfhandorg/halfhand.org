@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Menu, X } from 'lucide-react'
 import { DocSection } from '@/lib/docs'
+import { EthicalAd } from '@/components/EthicalAd'
 
 interface DocsSidebarProps {
   sections: DocSection[]
@@ -60,6 +61,11 @@ export function DocsSidebar({ sections }: DocsSidebarProps) {
             </div>
           ))}
         </nav>
+
+        <EthicalAd
+          type="text"
+          className="mt-8 rounded-md border border-border/40 p-3"
+        />
       </aside>
 
       {open && (
