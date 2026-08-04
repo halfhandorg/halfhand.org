@@ -10,7 +10,7 @@ agent's internal turns (prompts, tool calls, tool results) as structured
 events. Everything lands in a local SQLite database you can replay, inspect,
 list, and delete. Recordings never leave your machine.
 
-![Halfhand CLI](./assets/halfhand-cli.png)
+![Halfhand CLI](./assets/halfhand-cli.webp)
 
 If you just want to try it, go to the [Quickstart](./quickstart.md). For what
 "faithful playback" means (and where it ends), see [Replay & Inspect](./replay-inspect.md).

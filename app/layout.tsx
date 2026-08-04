@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Header } from '@/components/Header'
@@ -72,6 +73,11 @@ export default function RootLayout({
       >
         <Header />
         <main>{children}</main>
+        <Script
+          async
+          src="https://media.ethicalads.io/media/client/ethicalads.min.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )

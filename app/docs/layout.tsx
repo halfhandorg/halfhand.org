@@ -1,14 +1,30 @@
 import type { Metadata } from 'next'
 import { DocsSidebar } from '@/components/DocsSidebar'
+import { EthicalAd } from '@/components/EthicalAd'
 import { getDocsStructure } from '@/lib/docs'
 import { Footer } from '../sections/Footer'
 
+const title = 'Docs — Halfhand'
+const description =
+  'Halfhand documentation: installation, replay, MCP debugging, and CLI reference.'
+
 export const metadata: Metadata = {
-  title: 'Docs — Halfhand',
-  description:
-    'Halfhand documentation: installation, replay, MCP debugging, and CLI reference.',
+  title,
+  description,
   alternates: {
     canonical: 'https://halfhand.org/docs/',
+  },
+  openGraph: {
+    title,
+    description,
+    url: 'https://halfhand.org/docs/',
+    type: 'website',
+    images: ['https://halfhand.org/opengraph-image'],
+  },
+  twitter: {
+    title,
+    description,
+    images: ['https://halfhand.org/opengraph-image'],
   },
 }
 
@@ -27,6 +43,7 @@ export default function DocsLayout({
           <article className="prose prose-invert max-w-none prose-headings:tracking-tight prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-a:text-foreground prose-a:underline prose-strong:text-foreground prose-h2:mt-10 prose-h2:text-2xl prose-h3:text-xl prose-code:text-foreground prose-pre:bg-secondary/50">
             {children}
           </article>
+          <EthicalAd type="image" className="mt-12 flex justify-center" />
         </main>
       </div>
       <Footer />

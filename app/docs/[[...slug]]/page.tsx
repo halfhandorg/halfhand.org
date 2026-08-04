@@ -20,11 +20,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {}
   }
   const slugPath = slug && slug.length > 0 ? `${slug.join('/')}/` : ''
+  const isIndex = !slug || slug.length === 0
+  const title = isIndex ? 'Documentation — Halfhand' : `${doc.title} — Halfhand Docs`
+  const description = isIndex
+    ? 'Halfhand documentation: installation, replay, MCP debugging, and CLI reference.'
+    : `Read the documentation for ${doc.title} on Halfhand.`
+  const canonical = `https://halfhand.org/docs/${slugPath}`
+
   return {
-    title: `${doc.title} — Halfhand Docs`,
-    description: `Read the documentation for ${doc.title} on Halfhand.`,
+    title,
+    description,
     alternates: {
-      canonical: `https://halfhand.org/docs/${slugPath}`,
+      canonical,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: 'article',
+      images: ['https://halfhand.org/opengraph-image'],
+    },
+    twitter: {
+      title,
+      description,
+      images: ['https://halfhand.org/opengraph-image'],
     },
   }
 }
