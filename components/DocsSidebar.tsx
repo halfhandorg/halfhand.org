@@ -28,11 +28,12 @@ export function DocsSidebar({ sections }: DocsSidebarProps) {
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-40 w-64 transform border-r border-border/40 bg-background/95 backdrop-blur-md px-6 py-24 transition-transform duration-200 md:translate-x-0 md:border-none md:bg-transparent md:backdrop-blur-none md:block md:py-0 md:px-0 md:h-[calc(100vh-8rem)] md:sticky md:top-24 md:overflow-y-auto pr-4 scrollbar-thin',
+          'fixed inset-y-0 left-0 z-40 w-64 transform border-r border-border/40 bg-background/95 backdrop-blur-md px-6 py-24 transition-transform duration-200 md:translate-x-0 md:border-none md:bg-transparent md:backdrop-blur-none md:py-0 md:px-0 pr-4',
+          'md:flex md:flex-col md:h-[calc(100vh-4rem)] md:sticky md:top-16',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <nav className="space-y-8">
+        <nav className="space-y-8 md:min-h-0 md:flex-1 md:overflow-y-auto scrollbar-thin">
           {sections.map((section, idx) => (
             <div key={section.title || `sec-${idx}`}>
               {section.title && (
@@ -62,10 +63,7 @@ export function DocsSidebar({ sections }: DocsSidebarProps) {
           ))}
         </nav>
 
-        <EthicalAd
-          type="text"
-          className="mt-8 rounded-md border border-border/40 p-3"
-        />
+        <EthicalAd className="mt-8 shrink-0 rounded-md border border-border/40 p-4 md:mt-auto" />
       </aside>
 
       {open && (
