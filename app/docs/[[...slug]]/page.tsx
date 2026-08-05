@@ -64,7 +64,7 @@ export default async function DocPage({ params }: PageProps) {
       <div dangerouslySetInnerHTML={{ __html: before }} />
       {after && (
         <>
-          <EthicalAd type="text" className="not-prose my-10 rounded-md border border-border/40 p-3" />
+          <EthicalAd className="not-prose my-10 rounded-md border border-border/40 p-3" />
           <div dangerouslySetInnerHTML={{ __html: after }} />
         </>
       )}

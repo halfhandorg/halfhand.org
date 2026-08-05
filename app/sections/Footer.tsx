@@ -2,12 +2,10 @@ import { cn } from "@/lib/utils";
 import { EthicalAd } from "@/components/EthicalAd";
 
 const footerLinks = {
-  Product: [
+  Resources: [
     { label: "Documentation", href: "/docs", external: false },
     { label: "CLI Reference", href: "https://docs.rs/halfhand/1.0.0/halfhand/cli/struct.Cli.html", external: true },
     { label: "Configuration", href: "https://github.com/halfhandorg/halfhand/blob/main/docs/stats.md", external: true },
-  ],
-  Resources: [
     { label: "Changelog", href: "https://github.com/halfhandorg/halfhand/blob/main/CHANGELOG.md", external: true },
   ],
   Legal: [
@@ -20,9 +18,9 @@ export function Footer() {
   return (
     <footer className="border-t border-border/40 bg-secondary/20 py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-12">
           {/* Brand */}
-          <div className="sm:col-span-2 lg:col-span-1">
+          <div className="sm:col-span-2 lg:col-span-4">
             <a href="/" className="flex items-center gap-2">
               <span className="text-xl font-bold tracking-tight text-foreground">
                 hh
@@ -39,7 +37,7 @@ export function Footer() {
 
           {/* Links */}
           {Object.entries(footerLinks).map(([category, links]) => (
-            <div key={category}>
+            <div key={category} className="lg:col-span-2">
               <h3 className="text-sm font-semibold text-foreground tracking-wide uppercase">
                 {category}
               </h3>
@@ -62,14 +60,12 @@ export function Footer() {
               </ul>
             </div>
           ))}
+
+          {/* Ad */}
+          <EthicalAd className="sm:col-span-2 lg:col-span-4 lg:justify-self-start max-w-sm rounded-md border border-border/40 p-3" />
         </div>
 
-        <EthicalAd
-          type="text"
-          className="mt-12 rounded-md border border-border/40 p-3"
-        />
-
-        <div className="mt-8 pt-8 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} Halfhand. Released under
             Apache-2.0 license.
