@@ -20,7 +20,7 @@ export default function InstallPage() {
           </h1>
         </header>
 
-        <div className="prose prose-invert max-w-none prose-headings:tracking-tight prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-a:text-foreground prose-a:underline prose-strong:text-foreground prose-h2:mt-12 prose-h2:text-2xl prose-h3:text-xl">
+        <div className="prose prose-invert max-w-none prose-headings:tracking-tight prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-a:text-foreground prose-a:underline prose-strong:text-foreground prose-h2:mt-12 prose-h2:text-2xl prose-h3:text-xl prose-code:font-mono prose-pre:font-mono">
           <h2>Shell (macOS &amp; Linux, recommended)</h2>
           <Terminal
             title="bash"

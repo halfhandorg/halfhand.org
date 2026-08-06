@@ -10,8 +10,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Geist', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        mono: ['GeistMono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
       },
       colors: {
         border: 'hsl(var(--border))',

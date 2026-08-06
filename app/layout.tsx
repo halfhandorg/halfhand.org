@@ -1,10 +1,19 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
+import { Geist, JetBrains_Mono } from 'next/font/google'
 import { Header } from '@/components/Header'
 import { buildMetadata } from '@/lib/metadata'
 import './globals.css'
+
+const geistSans = Geist({
+  subsets: ['latin'],
+  variable: '--font-sans',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+})
 
 export const metadata: Metadata = {
   ...buildMetadata({ path: '/' }),
@@ -32,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${GeistSans.className} ${GeistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <Header />
         <main>{children}</main>
