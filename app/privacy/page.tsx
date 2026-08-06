@@ -1,29 +1,13 @@
 import type { Metadata } from 'next'
+import { buildMetadata } from '@/lib/metadata'
 import { Footer } from '../sections/Footer'
 
-const title = 'Privacy Policy — Halfhand'
-const description =
-  'How Halfhand handles data. Halfhand is local-first: agent recordings stay on your machine. This policy covers the halfhand.org website and the Halfhand software.'
-
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: {
-    canonical: 'https://halfhand.org/privacy/',
-  },
-  openGraph: {
-    title,
-    description,
-    url: 'https://halfhand.org/privacy/',
-    type: 'website',
-    images: ['https://halfhand.org/opengraph-image'],
-  },
-  twitter: {
-    title,
-    description,
-    images: ['https://halfhand.org/opengraph-image'],
-  },
-}
+export const metadata: Metadata = buildMetadata({
+  path: '/privacy',
+  title: 'Privacy Policy — Halfhand',
+  description:
+    'How Halfhand handles data. Halfhand is local-first: agent recordings stay on your machine. This policy covers the halfhand.org website and the Halfhand software.',
+})
 
 const LAST_UPDATED = 'July 11, 2026'
 
@@ -48,7 +32,7 @@ export default function PrivacyPage() {
             execution history are captured and stored on your own machine. This
             policy explains what data is involved when you use the Halfhand
             software and when you visit our website at{' '}
-            <a href="https://halfhand.org">halfhand.org</a>.
+            <a href="https://halfhand.org/">halfhand.org</a>.
           </p>
 
           <h2>Summary</h2>

@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { marked } from 'marked'
+import { canonicalUrl } from '@/lib/metadata'
 
 export interface DocItem {
   label: string
@@ -90,8 +91,66 @@ export function getDocsStructure(): DocSection[] {
 
 export interface DocPageContent {
   title: string
+  description: string
   html: string
   slug: string
+  /** Optional frontmatter date (YYYY-MM-DD), used as the article date. */
+  date?: string
+}
+
+interface DocFrontmatter {
+  title?: string
+  description?: string
+  date?: string
+}
+
+// Minimal YAML frontmatter parser (title / description / date only).
+function parseFrontmatter(raw: string): { frontmatter: DocFrontmatter; body: string } {
+  const match = raw.match(/^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n|$)/)
+  if (!match) return { frontmatter: {}, body: raw }
+
+  const frontmatter: DocFrontmatter = {}
+  for (const line of match[1].split(/\r?\n/)) {
+    const m = line.match(/^([A-Za-z][\w-]*):\s*(.*)$/)
+    if (m) {
+      const value = m[2].trim().replace(/^["']|["']$/g, '')
+      if (value) frontmatter[m[1] as keyof DocFrontmatter] = value
+    }
+  }
+  return { frontmatter, body: raw.slice(match[0].length) }
+}
+
+// Derive a meta description from the document's prose: drop code blocks,
+// images, links, HTML, headings, and markdown punctuation, then accumulate
+// paragraphs (skipping headings) until the description is substantial
+// (~60+ chars) or hits the 160-char meta-description cap.
+function extractDescription(body: string): string {
+  const paragraphs = body
+    .split(/\n\s*\n/)
+    .map((p) =>
+      p
+        .replace(/```[\s\S]*?```/g, ' ')
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+        .replace(/\[([^\]]+)\]\(([^)]*)\)/g, '$1')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/[*_~`>|]+/g, ' ')
+        .replace(/^#{1,6}\s+.*$/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+    )
+    .filter((p) => p.length > 0)
+
+  let description = ''
+  for (const para of paragraphs) {
+    const candidate = description ? `${description} ${para}` : para
+    if (candidate.length > 160) {
+      if (description.length >= 60) break
+      description = `${candidate.slice(0, 157).trimEnd()}...`
+      break
+    }
+    description = candidate
+  }
+  return description
 }
 
 export function getDocContentBySlug(slugArray: string[]): DocPageContent | null {
@@ -103,6 +162,7 @@ export function getDocContentBySlug(slugArray: string[]): DocPageContent | null 
   }
 
   const rawMarkdown = fs.readFileSync(filePath, 'utf8')
+  const { frontmatter, body } = parseFrontmatter(rawMarkdown)
 
   // Set up custom marked renderer to handle relative links and assets beautifully
   const renderer = new marked.Renderer()
@@ -132,17 +192,25 @@ export function getDocContentBySlug(slugArray: string[]): DocPageContent | null 
     return `<img src="${targetSrc}"${altAttr}${titleAttr} class="block my-8 rounded-lg shadow-md border border-border/40 max-w-sm md:max-w-md w-full h-auto" />`
   }
 
-  // Parse markdown to HTML using the custom renderer
-  const htmlContent = marked.parse(rawMarkdown, { renderer, async: false }) as string
+  // Parse markdown to HTML using the custom renderer (frontmatter already stripped)
+  const htmlContent = marked.parse(body, { renderer, async: false }) as string
 
-  // Extract the first H1 tag as the page title if possible
-  const h1Match = rawMarkdown.match(/^#\s+(.+)$/m)
-  const title = h1Match ? h1Match[1].trim() : 'Documentation'
+  // Title: frontmatter wins, else the first H1 heading.
+  const h1Match = body.match(/^#\s+(.+)$/m)
+  const title = frontmatter.title ?? (h1Match ? h1Match[1].trim() : 'Documentation')
+
+  // Description: frontmatter wins, else derived from the first paragraph.
+  const extractedDescription = extractDescription(body)
+  const description =
+    frontmatter.description ??
+    (extractedDescription || `Halfhand documentation for ${title}.`)
 
   return {
     title,
+    description,
     html: htmlContent,
     slug: relativePath,
+    date: frontmatter.date,
   }
 }
 
@@ -176,4 +244,51 @@ export function getAllDocSlugs(): string[][] {
   }
 
   return slugs
+}
+
+export interface DocMarkdown {
+  title: string
+  /** Raw markdown body: frontmatter stripped, leading H1 removed. */
+  markdown: string
+  slug: string
+}
+
+/**
+ * Raw markdown source of a doc, for single-file exports (e.g. /llms-full.txt).
+ * Returns null if the file doesn't exist. The leading H1 is removed because
+ * the exporter provides its own heading; the title is still resolved from
+ * frontmatter or the H1.
+ */
+export function getDocMarkdown(slugArray: string[]): DocMarkdown | null {
+  const relativePath = slugArray.join('/') || 'index'
+  const filePath = path.join(DOCS_DIR, `${relativePath}.md`)
+  if (!fs.existsSync(filePath)) return null
+
+  const raw = fs.readFileSync(filePath, 'utf8')
+  const { frontmatter, body } = parseFrontmatter(raw)
+  const h1 = body.match(/^#\s+(.+)$/m)
+  const title = frontmatter.title ?? (h1 ? h1[1].trim() : relativePath)
+
+  const markdown = body.replace(/^#\s+.*(?:\r?\n|$)/, '').trim()
+
+  return { title, markdown, slug: relativePath }
+}
+
+// Rewrites relative `./x.md` links in prose to absolute canonical URLs so the
+// single-file export reads cleanly for LLM ingestion. Fenced code blocks and
+// `../` (repo-root) references are left untouched.
+export function rewriteDocLinks(markdown: string): string {
+  const parts = markdown.split(/(```[\s\S]*?```)/g)
+  return parts
+    .map((part, i) => {
+      if (i % 2 === 1) return part // inside a code fence — leave as-is
+      return part.replace(
+        /\[([^\]]+)\]\(\.\/([^)]*\.md)(#[^)]*)?\)/g,
+        (_m, text, file: string, anchor: string | undefined) => {
+          const slug = file.replace(/\.md$/, '')
+          return `[${text}](${canonicalUrl(`/docs/${slug === 'index' ? '' : slug}`)}${anchor ?? ''})`
+        }
+      )
+    })
+    .join('')
 }

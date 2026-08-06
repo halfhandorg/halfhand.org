@@ -36,7 +36,7 @@ export function FinalCTA() {
         <p className="mt-6 text-sm text-muted-foreground">
           Requires Rust 1.75+ &middot; macOS, Linux, Windows &middot;{" "}
           <a
-            href="https://halfhand.org/install"
+            href="https://halfhand.org/install/"
             className="underline underline-offset-4 hover:text-foreground transition-colors"
           >
             Other install methods

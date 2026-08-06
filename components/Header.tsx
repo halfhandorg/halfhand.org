@@ -10,7 +10,7 @@ const navLinks = [
   { label: 'CLI', href: '#cli' },
   { label: 'Open Source', href: '#open-source' },
   { label: 'Testimonials', href: '#testimonials' },
-  { label: 'Documentation', href: '/docs', external: false },
+  { label: 'Documentation', href: '/docs/', external: false },
 ]
 
 export function Header() {

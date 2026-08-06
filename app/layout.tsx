@@ -3,13 +3,11 @@ import Script from 'next/script'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Header } from '@/components/Header'
-import { JSONLD } from '@/components/JSONLD'
+import { buildMetadata } from '@/lib/metadata'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Halfhand — Replay Every Action Your Agents Took',
-  description:
-    'Halfhand is a local-first developer tool for recording, replaying, and debugging AI agent execution. Inspect prompts, tool calls, MCP traffic, file modifications, and execution history through a deterministic replay interface.',
+  ...buildMetadata({ path: '/' }),
   keywords: [
     'AI agent observability',
     'AI agent debugging',
@@ -24,38 +22,6 @@ export const metadata: Metadata = {
     'replay AI agent sessions',
     'Model Context Protocol debugging',
   ],
-  metadataBase: new URL('https://halfhand.org'),
-  openGraph: {
-    title: 'Halfhand — Replay Every Action Your Agents Took',
-    description:
-      'Halfhand is a local-first developer tool for recording, replaying, and debugging AI agent execution.',
-    url: 'https://halfhand.org',
-    siteName: 'Halfhand',
-    type: 'website',
-    locale: 'en_US',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Halfhand — Replay Every Action Your Agents Took',
-    description:
-      'Local-first developer tool for recording, replaying, and debugging AI agent execution.',
-    site: '@halfhandorg',
-    creator: '@halfhandorg',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  alternates: {
-    canonical: 'https://halfhand.org',
-  },
 }
 
 export default function RootLayout({
@@ -65,9 +31,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <head>
-        <JSONLD />
-      </head>
       <body
         className={`${GeistSans.className} ${GeistMono.variable} antialiased`}
       >

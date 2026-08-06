@@ -1,3 +1,5 @@
+import { JsonLd } from '@/components/JsonLd'
+import { softwareApplicationSchema } from '@/lib/schema'
 import { Hero } from './sections/Hero'
 import { Problem } from './sections/Problem'
 import { HowItWorks } from './sections/HowItWorks'
@@ -13,6 +15,7 @@ import { Footer } from './sections/Footer'
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
+      <JsonLd data={softwareApplicationSchema()} />
       <Hero />
       <Problem />
       <HowItWorks />

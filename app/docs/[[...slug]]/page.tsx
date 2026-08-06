@@ -1,6 +1,10 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getDocContentBySlug, getAllDocSlugs, splitDocHtmlAtSection } from '@/lib/docs'
+import { buildMetadata, canonicalUrl, siteConfig } from '@/lib/metadata'
+import { fileFirstModified, fileLastModified } from '@/lib/fileDates'
+import { techArticleSchema } from '@/lib/schema'
+import { JsonLd } from '@/components/JsonLd'
 import { EthicalAd } from '@/components/EthicalAd'
 
 interface PageProps {
@@ -20,33 +24,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!doc) {
     return {}
   }
-  const slugPath = slug && slug.length > 0 ? `${slug.join('/')}/` : ''
+  const slugPath = slug && slug.length > 0 ? slug.join('/') : ''
   const isIndex = !slug || slug.length === 0
   const title = isIndex ? 'Documentation — Halfhand' : `${doc.title} — Halfhand Docs`
-  const description = isIndex
-    ? 'Halfhand documentation: installation, replay, MCP debugging, and CLI reference.'
-    : `Read the documentation for ${doc.title} on Halfhand.`
-  const canonical = `https://halfhand.org/docs/${slugPath}`
+  // From frontmatter when present, otherwise derived from the doc's first
+  // paragraph — never a generic fallback string.
+  const description = doc.description
 
-  return {
+  return buildMetadata({
+    path: `/docs/${slugPath}`,
     title,
     description,
-    alternates: {
-      canonical,
-    },
-    openGraph: {
-      title,
-      description,
-      url: canonical,
-      type: 'article',
-      images: ['https://halfhand.org/opengraph-image'],
-    },
-    twitter: {
-      title,
-      description,
-      images: ['https://halfhand.org/opengraph-image'],
-    },
-  }
+    type: 'article',
+  })
 }
 
 export default async function DocPage({ params }: PageProps) {
@@ -59,8 +49,26 @@ export default async function DocPage({ params }: PageProps) {
 
   const { before, after } = splitDocHtmlAtSection(doc.html)
 
+  const slugPath = slug && slug.length > 0 ? slug.join('/') : ''
+  const canonical = canonicalUrl(`/docs/${slugPath}`)
+  const sourcePath = `docs/${slugPath || 'index'}.md`
+  const dateModified = fileLastModified(sourcePath).toISOString()
+  const datePublished = doc.date
+    ? new Date(doc.date).toISOString()
+    : fileFirstModified(sourcePath).toISOString()
+
   return (
     <>
+      <JsonLd
+        data={techArticleSchema({
+          title: doc.title,
+          description: doc.description,
+          url: canonical,
+          datePublished,
+          dateModified,
+          image: `${siteConfig.url}/opengraph-image`,
+        })}
+      />
       <div dangerouslySetInnerHTML={{ __html: before }} />
       {after && (
         <>

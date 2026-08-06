@@ -1,30 +1,14 @@
 import type { Metadata } from 'next'
 import { Terminal } from '@/components/ui/terminal'
+import { buildMetadata } from '@/lib/metadata'
 import { Footer } from '../sections/Footer'
 
-const title = 'Install — Halfhand'
-const description =
-  'Install Halfhand via Cargo, Homebrew, or a prebuilt binary. Get the local-first AI agent flight recorder running in under a minute.'
-
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: {
-    canonical: 'https://halfhand.org/install/',
-  },
-  openGraph: {
-    title,
-    description,
-    url: 'https://halfhand.org/install/',
-    type: 'website',
-    images: ['https://halfhand.org/opengraph-image'],
-  },
-  twitter: {
-    title,
-    description,
-    images: ['https://halfhand.org/opengraph-image'],
-  },
-}
+export const metadata: Metadata = buildMetadata({
+  path: '/install',
+  title: 'Install — Halfhand',
+  description:
+    'Install Halfhand via Cargo, Homebrew, or a prebuilt binary. Get the local-first AI agent flight recorder running in under a minute.',
+})
 
 export default function InstallPage() {
   return (

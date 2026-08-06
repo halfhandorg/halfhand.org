@@ -2,31 +2,15 @@ import type { Metadata } from 'next'
 import { DocsSidebar } from '@/components/DocsSidebar'
 import { EthicalAd } from '@/components/EthicalAd'
 import { getDocsStructure } from '@/lib/docs'
+import { buildMetadata } from '@/lib/metadata'
 import { Footer } from '../sections/Footer'
 
-const title = 'Docs — Halfhand'
-const description =
-  'Halfhand documentation: installation, replay, MCP debugging, and CLI reference.'
-
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: {
-    canonical: 'https://halfhand.org/docs/',
-  },
-  openGraph: {
-    title,
-    description,
-    url: 'https://halfhand.org/docs/',
-    type: 'website',
-    images: ['https://halfhand.org/opengraph-image'],
-  },
-  twitter: {
-    title,
-    description,
-    images: ['https://halfhand.org/opengraph-image'],
-  },
-}
+export const metadata: Metadata = buildMetadata({
+  path: '/docs',
+  title: 'Docs — Halfhand',
+  description:
+    'Halfhand documentation: installation, replay, MCP debugging, and CLI reference.',
+})
 
 export default function DocsLayout({
   children,

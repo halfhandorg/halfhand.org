@@ -1,29 +1,13 @@
 import type { Metadata } from 'next'
+import { buildMetadata } from '@/lib/metadata'
 import { Footer } from '../sections/Footer'
 
-const title = 'Terms of Service — Halfhand'
-const description =
-  'The terms that govern use of the halfhand.org website and the Halfhand software, which is released under the Apache-2.0 license.'
-
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: {
-    canonical: 'https://halfhand.org/terms/',
-  },
-  openGraph: {
-    title,
-    description,
-    url: 'https://halfhand.org/terms/',
-    type: 'website',
-    images: ['https://halfhand.org/opengraph-image'],
-  },
-  twitter: {
-    title,
-    description,
-    images: ['https://halfhand.org/opengraph-image'],
-  },
-}
+export const metadata: Metadata = buildMetadata({
+  path: '/terms',
+  title: 'Terms of Service — Halfhand',
+  description:
+    'The terms that govern use of the halfhand.org website and the Halfhand software, which is released under the Apache-2.0 license.',
+})
 
 const LAST_UPDATED = 'July 11, 2026'
 
