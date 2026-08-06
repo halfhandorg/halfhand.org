@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { DocsSidebar } from '@/components/DocsSidebar'
-import { EthicalAd } from '@/components/EthicalAd'
 import { getDocsStructure } from '@/lib/docs'
 import { buildMetadata } from '@/lib/metadata'
 import { Footer } from '../sections/Footer'
@@ -27,7 +26,6 @@ export default function DocsLayout({
           <article className="prose prose-invert max-w-none prose-headings:tracking-tight prose-headings:text-foreground prose-p:text-muted-foreground prose-li:text-muted-foreground prose-a:text-foreground prose-a:underline prose-strong:text-foreground prose-h2:mt-10 prose-h2:text-2xl prose-h3:text-xl prose-code:text-foreground prose-code:font-mono prose-pre:bg-secondary/50 prose-pre:font-mono">
             {children}
           </article>
-          <EthicalAd type="image" className="mt-12 flex justify-center" />
         </main>
       </div>
       <Footer />

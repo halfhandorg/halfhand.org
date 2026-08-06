@@ -5,7 +5,6 @@ import { buildMetadata, canonicalUrl, siteConfig } from '@/lib/metadata'
 import { fileFirstModified, fileLastModified } from '@/lib/fileDates'
 import { techArticleSchema } from '@/lib/schema'
 import { JsonLd } from '@/components/JsonLd'
-import { EthicalAd } from '@/components/EthicalAd'
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>
@@ -70,12 +69,7 @@ export default async function DocPage({ params }: PageProps) {
         })}
       />
       <div dangerouslySetInnerHTML={{ __html: before }} />
-      {after && (
-        <>
-          <EthicalAd className="not-prose my-10 rounded-md border border-border/40 p-3" />
-          <div dangerouslySetInnerHTML={{ __html: after }} />
-        </>
-      )}
+      {after && <div dangerouslySetInnerHTML={{ __html: after }} />}
     </>
   )
 }
