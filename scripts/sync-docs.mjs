@@ -49,6 +49,24 @@ function gitDates(file) {
   }
 }
 
+// mdbook-style `{{#include ../STABILITY.md}}` pulls a repo-root file into a
+// page. Expand it here. Relative links in the included file are relative to
+// its own folder, so rebase them onto the page's folder (lib/docs.ts then
+// turns `../docs/x.md` into /docs/x/ and other `../` links into GitHub URLs).
+function expandIncludes(markdown, fileDir) {
+  return markdown.replace(/\{\{#include\s+([^}\s]+)\s*\}\}/g, (directive, target) => {
+    const includePath = path.resolve(fileDir, target)
+    if (!fs.existsSync(includePath)) {
+      console.warn(`warning: ${directive} not found at ${includePath}; left as-is`)
+      return directive
+    }
+    const rel = path.relative(fileDir, path.dirname(includePath)).split(path.sep).join('/')
+    const included = fs.readFileSync(includePath, 'utf8')
+    if (!rel) return included
+    return included.replace(/\]\((?![a-z][a-z0-9+.-]*:|#|\/)([^)\s]+)/gi, (_m, href) => `](${rel}/${href})`)
+  })
+}
+
 let copied = 0
 function walk(dir, rel) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -63,7 +81,8 @@ function walk(dir, rel) {
       fs.mkdirSync(path.join(docsOut, relPath), { recursive: true })
       walk(from, relPath)
     } else if (entry.name.endsWith('.md')) {
-      fs.copyFileSync(from, path.join(docsOut, relPath))
+      const markdown = expandIncludes(fs.readFileSync(from, 'utf8'), dir)
+      fs.writeFileSync(path.join(docsOut, relPath), markdown)
       const d = gitDates(path.join(src, relPath))
       if (d) dates[`docs/${relPath}`] = d
       copied++

@@ -36,6 +36,8 @@ jobs:
           path: core
           # Full history so sync-docs can date each page from its commits.
           fetch-depth: 0
+          # Cone mode also brings the repo-root files (STABILITY.md,
+          # SECURITY.md) that docs pages pull in with {{#include}}.
           sparse-checkout: docs
 
       - name: Setup Node
