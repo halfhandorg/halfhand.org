@@ -15,7 +15,30 @@ export interface DocSection {
   items: DocItem[]
 }
 
+// Synced from halfhandorg/halfhand's docs/ by scripts/sync-docs.mjs.
 const DOCS_DIR = path.join(process.cwd(), 'docs')
+
+// Where `../` links in the docs (repo-root files like README.md) resolve to.
+const CORE_REPO_BLOB = 'https://github.com/halfhandorg/halfhand/blob/main'
+
+// Contributor-only pages that live in the core repo's docs/ but are not
+// published on the website.
+const UNPUBLISHED = new Set(['1.0-definition-of-done', 'manual-qa', 'homebrew-tap-README'])
+
+function isPublished(slug: string): boolean {
+  return !UNPUBLISHED.has(slug)
+}
+
+// Resolves a doc link target that escapes docs/ (e.g. ../README.md#configuration)
+// to its GitHub URL, since those files are not part of the website.
+function resolveRepoRootLink(href: string): string | null {
+  if (!href.startsWith('../')) return null
+  const target = href.replace(/^(\.\.\/)+/, '')
+  // `../docs/x.md` is just a roundabout link to another docs page.
+  const docPage = target.match(/^docs\/(.+)\.md(#.*)?$/)
+  if (docPage) return `/docs/${docPage[1] === 'index' ? '' : `${docPage[1]}/`}${docPage[2] ?? ''}`
+  return `${CORE_REPO_BLOB}/${target}`
+}
 
 // Helper to normalize the hrefs from SUMMARY.md to our app routing
 function normalizeHref(rawHref: string): { href: string; slug: string } {
@@ -67,6 +90,7 @@ export function getDocsStructure(): DocSection[] {
       const rawHref = listMatch[3].trim()
       const { href, slug } = normalizeHref(rawHref)
       const isNested = indent.length > 0
+      if (!isPublished(slug)) continue
 
       const item: DocItem = { label, href, slug, isNested }
 
@@ -170,9 +194,13 @@ export function getDocContentBySlug(slugArray: string[]): DocPageContent | null 
   // 1. Rewrite relative .md links (e.g., ./quickstart.md -> /docs/quickstart/)
   renderer.link = ({ href, title, text }) => {
     let targetHref = href
-    if (href.endsWith('.md')) {
-      const normalized = href.replace(/^\.\//, '').replace(/\.md$/, '')
-      targetHref = normalized === 'index' ? '/docs/' : `/docs/${normalized}/`
+    const repoRoot = resolveRepoRootLink(href)
+    if (repoRoot) {
+      targetHref = repoRoot
+    } else if (/\.md(#.*)?$/.test(href) && !/^[a-z]+:/i.test(href)) {
+      const [file, anchor = ''] = href.split('#')
+      const normalized = file.replace(/^\.\//, '').replace(/\.md$/, '')
+      targetHref = `${normalized === 'index' ? '/docs/' : `/docs/${normalized}/`}${anchor ? `#${anchor}` : ''}`
     }
     const titleAttr = title ? ` title="${title}"` : ''
     return `<a href="${targetHref}"${titleAttr}>${text}</a>`
@@ -235,10 +263,15 @@ export function splitDocHtmlAtSection(html: string): {
 export function getAllDocSlugs(): string[][] {
   const sections = getDocsStructure()
   const slugs: string[][] = [[]] // [] represents the index /docs page
+  const seen = new Set<string>()
 
   for (const section of sections) {
     for (const item of section.items) {
       if (item.slug === '') continue // already handled by []
+      // SUMMARY.md may link one page twice (e.g. a group heading that points
+      // at its first child), so dedupe to keep static params unique.
+      if (seen.has(item.slug)) continue
+      seen.add(item.slug)
       slugs.push(item.slug.split('/'))
     }
   }
@@ -275,8 +308,8 @@ export function getDocMarkdown(slugArray: string[]): DocMarkdown | null {
 }
 
 // Rewrites relative `./x.md` links in prose to absolute canonical URLs so the
-// single-file export reads cleanly for LLM ingestion. Fenced code blocks and
-// `../` (repo-root) references are left untouched.
+// single-file export reads cleanly for LLM ingestion, and `../` (repo-root)
+// references to their GitHub URLs. Fenced code blocks are left untouched.
 export function rewriteDocLinks(markdown: string): string {
   const parts = markdown.split(/(```[\s\S]*?```)/g)
   return parts
@@ -288,6 +321,9 @@ export function rewriteDocLinks(markdown: string): string {
           const slug = file.replace(/\.md$/, '')
           return `[${text}](${canonicalUrl(`/docs/${slug === 'index' ? '' : slug}`)}${anchor ?? ''})`
         }
+      ).replace(
+        /\]\((\.\.\/[^)]*)\)/g,
+        (_m, href: string) => `](${resolveRepoRootLink(href) ?? href})`
       )
     })
     .join('')

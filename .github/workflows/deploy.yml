@@ -3,6 +3,14 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Docs live in halfhandorg/halfhand's docs/ folder. The core repo sends
+  # this event when docs change; the daily schedule is a safety net if that
+  # dispatch is not configured or fails.
+  repository_dispatch:
+    types: [docs-updated]
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -20,6 +28,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Checkout Halfhand docs
+        uses: actions/checkout@v4
+        with:
+          repository: halfhandorg/halfhand
+          ref: main
+          path: core
+          # Full history so sync-docs can date each page from its commits.
+          fetch-depth: 0
+          sparse-checkout: docs
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -28,6 +46,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
+
+      - name: Sync docs from the core repo
+        run: npm run sync-docs
+        env:
+          HALFHAND_DOCS_SRC: core/docs
 
       - name: Build with Next.js
         run: npm run build
