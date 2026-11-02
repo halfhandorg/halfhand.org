@@ -31,6 +31,23 @@ npm install --legacy-peer-deps
 ```
 *(Note: `--legacy-peer-deps` is required due to React 19 RC peer dependency resolution in the current Next.js ecosystem).*
 
+### Docs
+
+The docs pages under `/docs/` are **not** edited here. Their Markdown source is
+the [`docs/` folder of halfhandorg/halfhand](https://github.com/halfhandorg/halfhand/tree/main/docs),
+so docs ship in the same PR as the feature they describe. This repo renders them.
+
+Before `npm run dev` or `npm run build`, pull the docs in:
+
+```bash
+git clone https://github.com/halfhandorg/halfhand.git ../halfhand   # once
+npm run sync-docs        # or: HALFHAND_DOCS_SRC=/path/to/halfhand/docs npm run sync-docs
+```
+
+`docs/` is gitignored. CI syncs on every push, on a `docs-updated` dispatch from
+the core repo, and daily. Contributor-only pages (manual QA, 1.0 definition of
+done, the Homebrew tap README) are filtered out in `lib/docs.ts`.
+
 ### Development
 
 Run the development server:

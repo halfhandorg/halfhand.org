@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Docs are synced from halfhandorg/halfhand at build time (npm run sync-docs).
+/docs/
+/public/docs/assets/*.png
