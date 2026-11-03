@@ -34,7 +34,7 @@ export function FinalCTA() {
         </div>
 
         <p className="mt-6 text-sm text-muted-foreground">
-          Requires Rust 1.75+ &middot; macOS, Linux, Windows &middot;{" "}
+          Requires Rust 1.88+ &middot; macOS, Linux (Windows best-effort) &middot;{" "}
           <a
             href="https://halfhand.org/install/"
             className="underline underline-offset-4 hover:text-foreground transition-colors"

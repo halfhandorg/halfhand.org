@@ -9,14 +9,12 @@ const steps = [
     code: (
       <Terminal
         title="bash"
-        command="$ hh run claude-code"
+        command="$ hh run -- claude"
         lines={[
           "",
-          "Recording session...",
-          "Agent: claude-code",
-          "Session: a1b2c3",
+          "  …your agent runs as usual…",
           "",
-          "All tool calls, MCP traffic, and file changes will be captured.",
+          "✓ Recorded session a1b2c3 · 4m32s · 42 steps · 7 files changed · hh replay a1b2c3",
         ]}
       />
     ),
@@ -33,11 +31,12 @@ const steps = [
           "",
           "Replaying session a1b2c3",
           "",
-          "Controls:",
-          "  [n]ext     — advance one step",
-          "  [p]revious — go back one step",
-          "  [j]ump     — jump to timestamp",
-          "  [q]uit     — exit replay",
+          "Keys:",
+          "  j / k   — next / previous step",
+          "  n / N   — jump to the moments that matter",
+          "  f       — files touched",
+          "  J       — jump to a time offset",
+          "  ?       — every keybinding · q quit",
         ]}
       />
     ),

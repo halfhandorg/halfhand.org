@@ -4,7 +4,7 @@ import { EthicalAd } from "@/components/EthicalAd";
 const footerLinks = {
   Resources: [
     { label: "Documentation", href: "/docs/", external: false },
-    { label: "CLI Reference", href: "https://docs.rs/halfhand/1.0.0/halfhand/cli/struct.Cli.html", external: true },
+    { label: "CLI Reference", href: "https://docs.rs/halfhand/latest/halfhand/cli/struct.Cli.html", external: true },
     { label: "Configuration", href: "https://github.com/halfhandorg/halfhand/blob/main/README.md#configuration", external: true },
     { label: "Changelog", href: "https://github.com/halfhandorg/halfhand/blob/main/CHANGELOG.md", external: true },
   ],
