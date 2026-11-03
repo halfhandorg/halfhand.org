@@ -1,5 +1,13 @@
 import { canonicalUrl, siteConfig } from './metadata'
 
+/** The person who builds Halfhand, credited as creator in structured data. */
+const creator = {
+  '@type': 'Person',
+  name: 'Saadman Rafat',
+  url: 'https://saadman.dev',
+  sameAs: ['https://github.com/saadmanrafat'],
+}
+
 /**
  * schema.org/SoftwareApplication for the homepage — the primary entity for a
  * developer-tool marketing site.
@@ -10,8 +18,8 @@ export function softwareApplicationSchema() {
     '@type': 'SoftwareApplication',
     name: siteConfig.name,
     applicationCategory: 'DeveloperApplication',
-    operatingSystem: 'Linux, macOS, Windows',
-    softwareVersion: '0.1.0',
+    operatingSystem: 'Linux, macOS',
+    softwareVersion: '1.1.0',
     url: canonicalUrl('/'),
     description: siteConfig.defaultDescription,
     offers: {
@@ -24,6 +32,7 @@ export function softwareApplicationSchema() {
       name: siteConfig.name,
       url: siteConfig.url,
     },
+    creator,
     featureList: [
       'AI agent observability',
       'Deterministic agent execution replay',
@@ -88,6 +97,7 @@ export function techArticleSchema({
       name: siteConfig.name,
       url: siteConfig.url,
     },
+    creator,
     publisher: {
       '@type': 'Organization',
       name: siteConfig.name,

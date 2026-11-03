@@ -59,20 +59,16 @@ export function CLIExamples() {
     content: (
       <Terminal
         title="bash"
-        command="$ hh run claude-code"
+        command="$ hh run -- claude"
         lines={[
           '',
-          'Halfhand recorder initialized',
-          'Session: e7c3d9',
+          'Your agent runs as usual. Halfhand captures:',
+          '  terminal output (any agent)',
+          '  file changes, with real before/after diffs',
+          '  prompts, tool calls, model and token usage (Claude Code)',
+          '  MCP traffic (via hh mcp-proxy)',
           '',
-          'Intercepting:',
-          '  stdout/stderr',
-          '  tool calls via MCP',
-          '  file system operations',
-          '  shell commands',
-          '',
-          'Starting agent: claude-code',
-          'Press Ctrl+C to stop recording',
+          '✓ Recorded session e7c3d9 · 4m32s · 42 steps · 7 files changed · hh replay e7c3d9',
         ]}
       />
     ),
